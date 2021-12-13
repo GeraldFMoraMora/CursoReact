@@ -3,67 +3,72 @@ import { Layout, Input } from 'components';
 
 export const CadastroProdutos: React.FC = () => {
 
-    const [sku , setSku] = useState<string>('');
-    const [preco, setPreco] = useState<number>(0);
-    const [nome, setNome] = useState<string>("");
-    const [descrip, setDescrip] = useState<string>("");
+    const [ sku, setSku ] = useState<string>('')
+    const [ preco, setPreco ] = useState<string>('')
+    const [ nome, setNome ] = useState<string>('')
+    const [ descricao, setDescricao ] = useState<string>('')    
 
     const submit = () => {
         const produto = {
             sku, 
             preco, 
             nome, 
-            descrip
+            descricao
         }
         console.log(produto)
     }
 
     return (
-        <Layout titulo='Produtos'>
-            <div className='columns'>
-                <Input label ="SKU: *"
-                        columnClasses="is-half"
-                        onChange={setSku}
-                        value={sku}
-                />
+        <Layout titulo="Produtos">
+            <div className="columns">
+                <Input label="SKU: *" 
+                       columnClasses="is-half" 
+                       onChange={setSku}
+                       value={sku}
+                       id="inputSku"
+                       placeholder="Digite o SKU do produto" 
+                       />
 
-                <div className='field is-half column'>
-                    <label className='label' htmlFor='inputSku'>SKU: *</label>
-                    <div className='control'>
-                        <input className='input' id='inputSku' value={sku} onChange={event => setSku(event.target.value)} placeholder='Digite el codigo de producto'/>
+                <Input label="Preço: *" 
+                       columnClasses="is-half" 
+                       onChange={setPreco}
+                       value={preco}
+                       id="inputPreco"
+                       placeholder="Digite o Preço do produto" 
+                       />
+           </div>
+
+           <div className="columns">
+                <Input label="Nome: *" 
+                       columnClasses="is-full" 
+                       onChange={setNome}
+                       value={nome}
+                       id="inputNome"
+                       placeholder="Digite o Nome do produto"
+                    />
+           </div>
+
+           <div className="columns">
+            <div className="field column is-full">
+                    <label className="label" htmlFor="inputDesc">Descrição: *</label>
+                    <div className="control">
+                        <textarea className="textarea" 
+                            id="inputDesc" value={descricao}
+                            onChange={ event => setDescricao(event.target.value) }
+                            placeholder="Digite a Descrição detalhada do produto" />
                     </div>
-                </div>
-                <div className='field is-hald column'>
-                    <label className='label' htmlFor='inputPreco'>Precio: *</label>
-                    <div className='control'>
-                        <input className='input' id='inputPreco' value={preco} placeholder='Digite el precio de producto'/>
-                    </div>
-                </div>
             </div>
-            <div className='columns'>
-            <div className='field is-full column'>
-                <label className='label' htmlFor='inputNome'>Nombre: *</label>
-                <div className='control'>
-                    <input className='input' id='inputNome' value={nome} onChange={event => setNome(event.target.value)} placeholder='Digite el nombre de producto'/>
+           </div>
+
+           <div className="field is-grouped">
+                <div className="control is-link">
+                    <button onClick={submit} className="button is-link">Guardar</button>
                 </div>
-            </div>
-            </div>
-            <div className='columns'>
-            <div className='field is-full column'>
-                <label className='label' htmlFor='inputDesc'>Descripcion: *</label>
-                <div className='control'>
-                    <input className='textarea' id='inputDesc' value= {descrip} onChange={event => setDescrip(event.target.value)} placeholder='Digite la descripcion de producto'/>
+                <div className="control">
+                    <button className="button is-danger">Cancelar</button>
                 </div>
-            </div>
-            </div>
-            <div className='field is-grouped'>
-                <div className='control'>
-                    <button className='button is-link' onClick={submit}>Guardar</button>
-                </div>
-                <div className='control'>
-                    <button onClick={submit} className='button'>Volver</button>
-                </div>
-            </div>
+           </div>
+
         </Layout>
     )
 }
