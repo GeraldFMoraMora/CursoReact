@@ -1,5 +1,5 @@
-import { Layout } from 'components'
 import { useState } from 'react'
+import { Layout, Input } from 'components';
 
 export const CadastroProdutos: React.FC = () => {
 
@@ -21,6 +21,12 @@ export const CadastroProdutos: React.FC = () => {
     return (
         <Layout titulo='Produtos'>
             <div className='columns'>
+                <Input label ="SKU: *"
+                        columnClasses="is-half"
+                        onChange={setSku}
+                        value={sku}
+                />
+
                 <div className='field is-half column'>
                     <label className='label' htmlFor='inputSku'>SKU: *</label>
                     <div className='control'>
@@ -30,7 +36,7 @@ export const CadastroProdutos: React.FC = () => {
                 <div className='field is-hald column'>
                     <label className='label' htmlFor='inputPreco'>Precio: *</label>
                     <div className='control'>
-                        <input className='input' id='inputPreco' value={preco} onChange={event => setPreco(event.target.value)} placeholder='Digite el precio de producto'/>
+                        <input className='input' id='inputPreco' value={preco} placeholder='Digite el precio de producto'/>
                     </div>
                 </div>
             </div>
