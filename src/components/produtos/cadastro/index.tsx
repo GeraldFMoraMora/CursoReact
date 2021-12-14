@@ -4,6 +4,14 @@ import { useProdutoService } from 'app/services'
 import { Produto } from 'app/models/produtos'
 import { converterEmBigDecimal } from 'app/util/money'
 import { Alert } from 'components/common/message'
+import * as yup from 'yup'
+
+const validationSchema = yup.object().shape({
+    sku: yup.string().required(),
+    nome: yup.string().required(),
+    descricao: yup.string().required(),
+    preco: yup.number().required(),
+})
 
 export const CadastroProdutos: React.FC = () => {
 
@@ -25,26 +33,31 @@ export const CadastroProdutos: React.FC = () => {
             descricao
         }
 
-        if(id){
-            service
-                .actualizar(produto)
-                .then(response => {
-                    setMessages([{
-                        tipo: "success", texto: "Producto actualizado con exito"
-                    }])
-                })
-        }else{
-            
-            service
-                .salvar(produto)
-                .then(produtoResposta => {
-                    setId(produtoResposta.id)
-                    setCadastro(produtoResposta.cadastro)
-                    setMessages([{
-                        tipo:"success", texto: "Producto guardado con exito"
-                    }])
-                })
-        }
+        validationSchema.validate(produto).then(obj => {
+            if(id){
+                service
+                    .actualizar(produto)
+                    .then(response => {
+                        setMessages([{
+                            tipo: "success", texto: "Producto actualizado con exito"
+                        }])
+                    })
+            }else{
+                
+                service
+                    .salvar(produto)
+                    .then(produtoResposta => {
+                        setId(produtoResposta.id)
+                        setCadastro(produtoResposta.cadastro)
+                        setMessages([{
+                            tipo:"success", texto: "Producto guardado con exito"
+                        }])
+                    })
+            }
+        }).catch(err => {
+            console.log(JSON.parse(JSON.stringify(err)))
+        })
+        
 
     }
 
