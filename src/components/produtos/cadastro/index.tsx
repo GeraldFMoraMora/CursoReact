@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout, Input, Message } from 'components'
 import { useProdutoService } from 'app/services'
 import { Produto } from 'app/models/produtos'
-import { converterEmBigDecimal } from 'app/util/money'
+import { converterEmBigDecimal, formatReal } from 'app/util/money'
 import { Alert } from 'components/common/message'
 import * as yup from 'yup'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const msgCampoObrigatorio ="Campo Obrigatório";
 
@@ -14,7 +16,7 @@ const validationSchema = yup.object().shape({
     descricao: yup.string().trim()
                     .required(msgCampoObrigatorio)
                     .length(10, "Deve possuir pelo menos 10 caracteres"),
-    preco: yup.number().required(msgCampoObrigatorio).moreThan(0, "Valor deve ser maior que 0,00 (Zero)")
+    preco: yup.number().required(msgCampoObrigatorio).moreThan(10, "Valor deve ser maior que 0,00 (Zero)")
 })
 interface FormErrors {
     sku?:string;
@@ -34,6 +36,21 @@ export const CadastroProdutos: React.FC = () => {
     const [ cadastro, setCadastro ] = useState<string>('')
     const [ messages, setMessages ] = useState<Array<Alert>>([])
     const [ errors, setErrors ] = useState<FormErrors>({})
+    const router = useRouter();
+    const { id: queryId} = router.query;
+
+    useEffect( () => {        
+        if(queryId){
+            service.carregarProduto(queryId).then(produtoEncontrado => {
+                setId(produtoEncontrado.id)
+                setSku(produtoEncontrado.sku)
+                setNome(produtoEncontrado.nome)
+                setDescricao(produtoEncontrado.descricao)
+                setPreco( formatReal(`${produtoEncontrado.preco}`))
+                setCadastro(produtoEncontrado.cadastro || '')
+            })
+        } 
+    } , [ queryId ] )
 
     const submit = () => {
         const produto: Produto = {
@@ -149,11 +166,13 @@ export const CadastroProdutos: React.FC = () => {
            <div className="field is-grouped">
                 <div className="control is-link">
                     <button onClick={submit} className="button">
-                        { id ? "Atualizar" : "Salvar" }                        
+                        { id ? "Atualizar" : "Guardar" }                        
                     </button>
                 </div>
                 <div className="control">
-                    <button className="button">Voltar</button>
+                    <Link href="/consultas/produtos">
+                        <button className="button">Cancelar</button>
+                    </Link>
                 </div>
            </div>
 
