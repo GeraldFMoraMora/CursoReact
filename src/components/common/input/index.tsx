@@ -1,5 +1,5 @@
 import { InputHTMLAttributes } from 'react'
-import { formatReal} from 'app/util/money'
+import { formatReal } from 'app/util/money'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
@@ -40,7 +40,7 @@ export const Input: React.FC<InputProps> = ({
                     id={id} {...inputProps}
                     onChange={onInputChange}/>
                 {error &&
-                    <p className='help is-danger'>{ error }</p>
+                    <p className="help is-danger">{ error }</p>
                 }
             </div>
         </div>

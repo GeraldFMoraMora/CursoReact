@@ -8,21 +8,22 @@ import * as yup from 'yup'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+
 const msgCampoObrigatorio ="Campo Obrigatório";
 
 const validationSchema = yup.object().shape({
     sku: yup.string().trim().required(msgCampoObrigatorio),
     nome: yup.string().trim().required(msgCampoObrigatorio),
     descricao: yup.string().trim()
-                    .required(msgCampoObrigatorio)
-                    .length(10, "Deve possuir pelo menos 10 caracteres"),
-    preco: yup.number().required(msgCampoObrigatorio).moreThan(10, "Valor deve ser maior que 0,00 (Zero)")
+                    .required(msgCampoObrigatorio),
+    preco: yup.number().required(msgCampoObrigatorio).moreThan(0, "Valor deve ser maior que 0,00 (Zero)")
 })
-interface FormErrors {
-    sku?:string;
-    nome?:string;
-    preco?:string;
-    descricao?:string;
+
+interface FormErros {
+    sku?: string;
+    nome?: string;
+    preco?: string;
+    descricao?: string;
 }
 
 export const CadastroProdutos: React.FC = () => {
@@ -35,9 +36,9 @@ export const CadastroProdutos: React.FC = () => {
     const [ id, setId ] = useState<string>('')
     const [ cadastro, setCadastro ] = useState<string>('')
     const [ messages, setMessages ] = useState<Array<Alert>>([])
-    const [ errors, setErrors ] = useState<FormErrors>({})
+    const [ errors, setErrors ] = useState<FormErros>({})
     const router = useRouter();
-    const { id: queryId} = router.query;
+    const { id: queryId  } = router.query;
 
     useEffect( () => {        
         if(queryId){
@@ -63,9 +64,10 @@ export const CadastroProdutos: React.FC = () => {
 
         validationSchema.validate(produto).then(obj => {
             setErrors({})
+
             if(id){
                 service
-                    .actualizar(produto)
+                    .atualizar(produto)
                     .then(response => {
                         setMessages([{
                             tipo: "success", texto: "Produto atualizado com sucesso!"
@@ -123,7 +125,7 @@ export const CadastroProdutos: React.FC = () => {
                        value={sku}
                        id="inputSku"
                        placeholder="Digite o SKU do produto" 
-                       error={ errors.sku }
+                       error={errors.sku}
                        />
 
                 <Input label="Preço: *" 
@@ -134,7 +136,7 @@ export const CadastroProdutos: React.FC = () => {
                        placeholder="Digite o Preço do produto" 
                        currency
                        maxLength={16}
-                       error={ errors.preco }
+                       error={errors.preco}
                        />
            </div>
 
@@ -145,7 +147,7 @@ export const CadastroProdutos: React.FC = () => {
                        value={nome}
                        id="inputNome"
                        placeholder="Digite o Nome do produto"
-                       error= {errors.nome}
+                       error={errors.nome}
                     />
            </div>
 
@@ -157,8 +159,9 @@ export const CadastroProdutos: React.FC = () => {
                         id="inputDesc" value={descricao}
                         onChange={ event => setDescricao(event.target.value) }
                         placeholder="Digite a Descrição detalhada do produto" />
-                        {errors.descricao &&
-                        <p className='help is-danger'>{ errors.descricao }</p>}
+                    {errors.descricao &&
+                        <p className="help is-danger">{errors.descricao}</p>
+                    }
                 </div>
             </div>
            </div>
@@ -166,12 +169,12 @@ export const CadastroProdutos: React.FC = () => {
            <div className="field is-grouped">
                 <div className="control is-link">
                     <button onClick={submit} className="button">
-                        { id ? "Atualizar" : "Guardar" }                        
+                        { id ? "Atualizar" : "Salvar" }                        
                     </button>
                 </div>
                 <div className="control">
                     <Link href="/consultas/produtos">
-                        <button className="button">Cancelar</button>
+                        <button className="button">Voltar</button>
                     </Link>
                 </div>
            </div>
@@ -179,3 +182,4 @@ export const CadastroProdutos: React.FC = () => {
         </Layout>
     )
 }
+

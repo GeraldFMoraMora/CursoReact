@@ -14,27 +14,27 @@ import { Alert } from 'components/common/message'
 export const ListagemProdutos: React.FC = () => {
 
     const service = useProdutoService();
-    const [messages, setMessages] = useState<Array<Alert>>([])
-
+    const [ messages, setMessages ] = useState<Array<Alert>>([])
     const { data: result, error } = useSWR<AxiosResponse<Produto[]>>
-           ('/api/produtos', url => httpClient.get(url) )
+                    ('/api/produtos', url => httpClient.get(url) )
 
-    const [lista, setLista] = useState<Produto[]>([])
+    const [ lista, setLista ] = useState<Produto[]>([])
 
-    useEffect(() => {
+    useEffect( () => {
         setLista(result?.data || [])
     }, [result])
 
     const editar = (produto: Produto) => {
         const url = `/cadastros/produtos?id=${produto.id}`
         Router.push(url)
-    }
+    } 
+
     const deletar = (produto: Produto) => {
         service.deletar(produto.id).then(response => {
             setMessages([
-                {tipo: "success", texto: "Producto eliminado con exito"}
+                {  tipo: "success", texto: "Produto excluido com sucesso!" }
             ])
-            const listaAlterada: Produto[] = lista?.filter( p => p.id != produto.id)
+            const listaAlterada: Produto[] = lista?.filter( p => p.id !== produto.id )
             setLista(listaAlterada)
         })
     }
@@ -42,10 +42,9 @@ export const ListagemProdutos: React.FC = () => {
     return (
         <Layout titulo="Produtos" mensagens={messages}>
             <Link href="/cadastros/produtos">
-                <button className="button is-warning">Nuevo</button>
+                <button className="button is-warning">Novo</button>
             </Link>
-            <br></br>
-            <br />
+            <br /><br />
             <Loader show={!result} />
             <TabelaProdutos onEdit={editar} onDelete={deletar} produtos={lista} />
         </Layout>

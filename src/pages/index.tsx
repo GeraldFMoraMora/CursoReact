@@ -9,11 +9,7 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      Hello word!
-      <Layout titulo='Cadastro de Produtos1'>
-        Beggining
-      </Layout>
-
+        <Layout />
     </div>
   )
 }
