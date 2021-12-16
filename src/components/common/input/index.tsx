@@ -1,5 +1,9 @@
-import { InputHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes } from 'react'
 import { formatReal } from 'app/util/money'
+import { FormatUtils} from '@4us-dev/utils'
+
+//const formatUtils = new FormatUtils();
+//const value = new FormatUtils().formatCPF('66273306010');
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
@@ -52,5 +56,57 @@ export const Input: React.FC<InputProps> = ({
 export const InputMoney: React.FC<InputProps> = (props: InputProps) => {
     return (
         <Input {...props} formatter={formatReal} />
+    )
+}
+
+export const InputCPF: React.FC<InputProps> = (props: InputProps) => {
+    const formatData = (value: string) => {
+        if(!value){
+            return '';
+        }
+        return (value);
+    }
+    return (
+        <Input {...props} formatter={formatData} />
+    )
+}
+
+export const InputTelefone: React.FC<InputProps> = (props: InputProps) => {
+    const formatData = (value: string) => {
+        if(!value){
+            return '';
+        }
+        return (value);
+    }
+    return (
+        <Input {...props} formatter={formatData} />
+    )
+}
+
+export const InputDate: React.FC<InputProps> = (props: InputProps) => {
+
+    const formatData = (value: string) => {
+        if(!value){
+            return '';
+        }
+
+        const data = value;
+        const size = value.length;
+
+        if(size <= 2){
+            return data;
+        }
+
+        if(size <= 4){
+            return data;
+        }
+
+        if(size <= 6){
+            return data;
+        }
+    }
+
+    return (
+        <Input {...props} maxLength={10} formatter={formatData} />
     )
 }

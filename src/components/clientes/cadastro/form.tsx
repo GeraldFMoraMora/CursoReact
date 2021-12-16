@@ -1,6 +1,6 @@
 import { Cliente } from 'app/models/clientes'
 import { useFormik } from 'formik'
-import { Input } from 'components'
+import { Input, InputCPF, InputTelefone, InputDate } from 'components'
 
 interface ClienteFormProps {
     cliente: Cliente;
@@ -9,8 +9,8 @@ interface ClienteFormProps {
 
 const formScheme: Cliente = {
     cadastro: '',
-    cpf: '0000000000',
-    dataNascimento: '01/01/2021',
+    cpf: '',
+    dataNascimento: '',
     email: '',
     endereco: '',
     id: '',
@@ -67,9 +67,10 @@ export const ClienteForm: React.FC<ClienteFormProps> = ({
                       onChange={formik.handleChange} 
                       value={formik.values.cpf} />
 
-                <Input id="dataNascimento" 
+                <InputDate id="dataNascimento" 
                       name="dataNascimento"
                       label="Data Nascimento: *"
+                      placeholder='dd/MM/yyyy'
                       autoComplete="off" 
                       columnClasses="is-half"
                       onChange={formik.handleChange} 
