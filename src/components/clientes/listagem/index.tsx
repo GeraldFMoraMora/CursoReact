@@ -3,7 +3,7 @@ import { Layout } from 'components'
 import { Input, InputCPF } from 'components'
 import { useFormik } from 'formik'
 import { useState } from 'react'
-//import { DataTable } from 'primereact/datatable'
+import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 
 interface ConsultaClientesForm {
@@ -63,12 +63,12 @@ export const ListagemClientes: React.FC = () => {
             </form>
             <div className="columns">
                 <div className="is-full">
-                   // <DataTable value={clientes}>
-                     //   <Column field="id" header="Código"  />
-                      //  <Column field="nome" header="Nome"  />
-                      //  <Column field="cpf" header="CPF"  />
-                      //  <Column field="email" header="Email" />
-                   // </DataTable>
+                    <DataTable value={clientes}>
+                        <Column field="id" header="Código"  />
+                        <Column field="nome" header="Nome"  />
+                        <Column field="cpf" header="CPF"  />
+                        <Column field="email" header="Email" />
+                    </DataTable>
                 </div>
             </div>
         </Layout>
