@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ClienteForm } from './form'
 import { Cliente } from 'app/models/clientes'
 import { useClienteService } from 'app/services'
-import { Alert } from 'components/common/message'
+//import { Alert } from 'components/common/message'
 
 export const CadastroCliente: React.FC = () => {
 
