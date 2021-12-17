@@ -26,6 +26,7 @@ export const ClienteForm: React.FC<ClienteFormProps> = ({
     const formik = useFormik<Cliente>({
         initialValues: {...formScheme, ...cliente},
         onSubmit,
+        enableReinitialize: true
     })
 
     return (
@@ -63,6 +64,7 @@ export const ClienteForm: React.FC<ClienteFormProps> = ({
                       name="cpf"
                       label="CPF: *"
                       autoComplete="off" 
+                      placeholder='000.000.000-00'
                       columnClasses="is-half"
                       onChange={formik.handleChange} 
                       value={formik.values.cpf} />
