@@ -17,7 +17,12 @@ import { InputText } from 'primereact/inputtext'
 import { Dialog } from 'primereact/dialog'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
-import { formatReal } from 'app/util/money'
+import { Dropdown } from 'primereact/dropdown'
+
+const formatadorMoney = new Intl.NumberFormat('pt-BR',{
+    style: 'currency',
+    currency: 'CRC'
+})
 
 interface VendasFormProps {
     onSubmit: (venda: Venda) => void;
@@ -34,6 +39,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({
     onSubmit
 }) => {
 
+    const formasPagamento: String[] = ["Efectivo", "Sinpe"]
     const clienteService = useClienteService();
     const produtoService = useProdutoService();
     const [ listaProdutos, setListaProdutos ] = useState<Produto[]>([])
@@ -100,6 +106,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         setProduto(null)
         setCodigoProduto('')
         setQuantidadeProduto(0)
+
+        const total = totalVenda()
+        formik.setFieldValue('total', total)
     }
 
     const handleFecharDialogProdutoNaoEncontrado = () => {
@@ -132,6 +141,15 @@ export const VendasForm: React.FC<VendasFormProps> = ({
     const disableAddProdutoButton = () => {
         return !produto || !quantidadeProduto
     }
+
+    const totalVenda = () =>{
+        const totais : number[] = formik.values.items?.map(iv => iv.quantidade * iv.produto.preco);
+        if(totais.length){
+            return totais.reduce((sumatoria = 0, valorItemActual) => sumatoria + valorItemActual);
+        }else {
+            return 0;
+        }
+    } 
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -189,20 +207,47 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                     </div>
 
                     <div className="p-col-12">
-                        <DataTable value={formik.values.items}>
+                        <DataTable value={formik.values.items} emptyMessage="Ningun producto agregado.">
                             <Column field="produto.id" header="Código" />
                             <Column field="produto.sku" header="SKU" />
                             <Column field="produto.nome" header="Produto" />
                             <Column field="produto.preco" header="Preço Unitário" />
                             <Column field="quantidade" header="QTD" />
                             <Column header="Total" body={ (iv: ItemVenda) => {
+                                const total = iv.produto.preco * iv.quantidade
+                                const totalFormatado = formatadorMoney.format(total)
                                 return (
                                     <div>
-                                        { iv.produto.preco * iv.quantidade }
+                                        { totalFormatado }
                                     </div>
                                 )
                             } } />
                         </DataTable>
+                    </div>
+
+                    <div className='p-col-5'>
+                        <div className='p-field'>
+                            <label htmlFor='formaPagamento'>Forma de pago: *</label>
+                            <Dropdown id='formaPagamento'
+                                options={formasPagamento}
+                                value={formik.values.formaPagamento}
+                                onChange= {e => formik.setFieldValue("formaPagamento", e.value)}
+                                placeholder='Seleccione...'
+                                />
+                        </div>
+                    </div>
+
+                    <div className='p-col-2'>
+                        <div className='p-field'>
+                            <label htmlFor="items">Items:</label>
+                            <InputText disabled value={formik.values.items?.length}  />
+                        </div>
+                    </div>
+                    <div className='p-col-2'>
+                        <div className='p-field'>
+                            <label htmlFor="total">Total:</label>
+                            <InputText disabled value={formatadorMoney.format(formik.values.total)}  />
+                        </div>
                     </div>
 
 
