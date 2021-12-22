@@ -213,6 +213,18 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
                     <div className="p-col-12">
                         <DataTable value={formik.values.items} emptyMessage="Ningun producto agregado.">
+                            <Column body ={ (item: ItemVenda) => {
+                                const handleRemoverItem = () => {
+                                    const novaLista = formik.values.items.filter(
+                                        iv => iv.produto.id != item.produto.id
+                                    )
+                                    formik.setFieldValue("items", novaLista)
+                                }
+                                return (
+                                    <Button type="button" label="Quitar" onClick={handleRemoverItem}/>
+                                )
+                            }}
+                            />
                             <Column field="produto.id" header="Código" />
                             <Column field="produto.sku" header="SKU" />
                             <Column field="produto.nome" header="Produto" />
