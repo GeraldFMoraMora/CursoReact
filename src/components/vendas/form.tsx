@@ -18,6 +18,7 @@ import { Dialog } from 'primereact/dialog'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
+import { validationScheme } from './validationScheme'
 
 const formatadorMoney = new Intl.NumberFormat('pt-BR',{
     style: 'currency',
@@ -58,7 +59,8 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
     const formik = useFormik<Venda>({
         onSubmit,
-        initialValues: formScheme
+        initialValues: formScheme,
+        validationSchema: validationScheme
     })
 
     const handleClienteAutocomplete = (e: AutoCompleteCompleteMethodParams) => {
@@ -78,7 +80,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({
             produtoService.carregarProduto(codigoProduto)
                         .then(produtoEncontrado => setProduto(produtoEncontrado))
                         .catch(error => {
-                            setMensagem("Produto não encontrado!")
+                            setMensagem("Producto no encontrado!")
                         })
         }
     }
@@ -165,6 +167,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                             name="cliente" 
                             onChange={handleClienteChange}
                             />
+                    <small className='p-error p-d-block'>
+                        {formik.errors.cliente}
+                    </small>
                 </div>    
 
                 <div className="p-grid">
@@ -223,6 +228,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                                 )
                             } } />
                         </DataTable>
+                        <small className='p-error p-d-block'>
+                            {formik.touched && formik.errors.items}
+                        </small>
                     </div>
 
                     <div className='p-col-5'>
@@ -234,6 +242,9 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                                 onChange= {e => formik.setFieldValue("formaPagamento", e.value)}
                                 placeholder='Seleccione...'
                                 />
+                            <small className='p-error p-d-block'>
+                                {formik.touched && formik.errors.formaPagamento}
+                            </small>
                         </div>
                     </div>
 
