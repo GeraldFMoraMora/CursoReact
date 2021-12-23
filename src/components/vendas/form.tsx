@@ -27,6 +27,8 @@ const formatadorMoney = new Intl.NumberFormat('pt-BR',{
 
 interface VendasFormProps {
     onSubmit: (venda: Venda) => void;
+    onNovaVenda: () => void;
+    vendaRealizada: boolean;
 }
 
 const formScheme: Venda = {
@@ -37,10 +39,12 @@ const formScheme: Venda = {
 }
 
 export const VendasForm: React.FC<VendasFormProps> = ({
-    onSubmit
+    onSubmit,
+    onNovaVenda,
+    vendaRealizada
 }) => {
 
-    const formasPagamento: String[] = ["Efectivo", "Sinpe"]
+    const formasPagamento: String[] = ["EFECTIVO", "SINPE"]
     const clienteService = useClienteService();
     const produtoService = useProdutoService();
     const [ listaProdutos, setListaProdutos ] = useState<Produto[]>([])
@@ -153,6 +157,13 @@ export const VendasForm: React.FC<VendasFormProps> = ({
         }
     } 
 
+    const realizarNovaVenda = () => {
+        onNovaVenda();
+        formik.resetForm();
+        formik.setFieldValue("itens", [])
+        formik.setFieldTouched("itens", false)
+    }
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="p-fluid">
@@ -168,7 +179,7 @@ export const VendasForm: React.FC<VendasFormProps> = ({
                             onChange={handleClienteChange}
                             />
                     <small className='p-error p-d-block'>
-                        {formik.errors.cliente}
+                        {formik.touched && formik.errors.cliente}
                     </small>
                 </div>    
 
@@ -275,7 +286,12 @@ export const VendasForm: React.FC<VendasFormProps> = ({
 
 
                 </div>  
-                <Button type="submit" label="Finalizar" />
+                {!vendaRealizada &&
+                    <Button type="submit" label="Finalizar" />
+                }
+                {vendaRealizada && 
+                    <Button type="button" onClick={realizarNovaVenda} label="Nova Venda" className="p-button-success" />
+                }
             </div>
             <Dialog header="Atenção!" position="top" 
                     visible={!!mensagem} 
